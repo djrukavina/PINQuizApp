@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using QuizAppAPI.Context;
+﻿using QuizAppAPI.Context;
 using QuizAppAPI.Data;
 using QuizAppAPI.ViewModel;
 

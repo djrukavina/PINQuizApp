@@ -16,7 +16,7 @@ namespace QuizAppAPI.Controllers
             _apiUrl = configuration.GetValue<string>("OpentDbAPI");
         }
 
-        [HttpGet("amount, category, difficulty")]
+        [HttpGet("quizParams")]
         public async Task<IActionResult> GetQuizData(int amount, int category, int difficulty)
         {
             ICollection<int> _category = QuizSettings.QuizCategories.Keys;
@@ -36,7 +36,7 @@ namespace QuizAppAPI.Controllers
 
             try
             {
-                fetchData = await _httpClient.GetFromJsonAsync<FetchQuizModel>($"{_apiUrl}?amount={amount}{requestString}");
+                fetchData = await _httpClient.GetFromJsonAsync<FetchQuizModel>($"{_apiUrl}?amount={amount}{requestString}&type=multiple");
             }
             catch (Exception ex)
             {

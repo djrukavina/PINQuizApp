@@ -20,4 +20,8 @@
     <ProjectReference Include="..\QuizAppShared\QuizAppShared.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Data\" />
+  </ItemGroup>
+
 </Project>

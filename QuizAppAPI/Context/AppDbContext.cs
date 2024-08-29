@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using QuizAppAPI.Data;
+using QuizAppShared.Data;
 
 namespace QuizAppAPI.Context
 {
