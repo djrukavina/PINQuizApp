@@ -1,0 +1,34 @@
+﻿@page "/"
+@inject IJSRuntime js
+
+<PageTitle>Home</PageTitle>
+
+<AuthorizeView>
+    <Authorized>
+        <h1>Hello, @context.User.Identity.Name!</h1>
+    </Authorized>
+    <NotAuthorized>
+        <h1>Hello, Guest!</h1>
+    </NotAuthorized>
+</AuthorizeView>
+
+Welcome to your new app.
+
+<AuthorizeView>
+    <Authorized>
+        <button class="btn btn-outline-primary" @onclick="DisplayGreetingAlert">Display Greeting Alert</button>
+    </Authorized>
+</AuthorizeView>
+
+@code
+{
+    [CascadingParameter]
+    private Task<AuthenticationState> authenticationState { get; set; }
+
+    private async Task DisplayGreetingAlert()
+    {
+        var authState = await authenticationState;
+        var message = $"Hello {authState.User.Identity.Name}";
+        js.InvokeVoidAsync("alert", message);
+    }
+}
