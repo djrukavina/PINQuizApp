@@ -1,4 +1,5 @@
-﻿@using QuizAppUI.Components.Authentication
+﻿@using QuizAppShared.Data
+@using QuizAppUI.Components.Authentication
 @inject UserAccountService userAccountService
 @inject AuthenticationStateProvider authStateProvider
 @inject NavigationManager navManager
@@ -37,8 +38,8 @@
 
     private async Task Authenticate()
     {
-        var userAccount = userAccountService.GetByUserName(model.UserName);
-        if (userAccount == null || userAccount.Password != model.Password)
+        ValidatedUser userAccount = await userAccountService.GetUserByNamePassword(model.UserName, model.Password);
+        if (userAccount == null)
         {
             await js.InvokeVoidAsync("alert", "Invalid User Name or Password!");
             return;

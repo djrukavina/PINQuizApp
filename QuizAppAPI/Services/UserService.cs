@@ -30,9 +30,9 @@ namespace QuizAppAPI.Services
             return _context.User.ToList();
         }
 
-        public User GetUser(string username)
+        public User GetUser(string username, string password)
         {
-            return _context.User.FirstOrDefault(x => x.UserName == username);
+            return _context.User.FirstOrDefault(x => x.UserName == username && x.UserPassword == password);
         }
     }
 }

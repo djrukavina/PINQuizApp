@@ -1,21 +1,30 @@
-﻿namespace QuizAppUI.Components.Authentication
+﻿using QuizAppShared.Data;
+
+namespace QuizAppUI.Components.Authentication
 {
     public class UserAccountService
     {
-        public UserAccountService()
+        private readonly HttpClient _httpClient;
+        private readonly string _apiUrl;
+        public UserAccountService(HttpClient httpClient, IConfiguration configuration)
         {
-            _users = new List<UserAccount>
-            {
-                new UserAccount { UserName = "admin", Password = "admin", Role = "Administrator" },
-                new UserAccount { UserName = "user", Password = "user", Role = "User" }
-            };
+            _httpClient = httpClient;
+            _apiUrl = configuration.GetValue<string>("ServerAPI");
         }
 
-        private List<UserAccount> _users;
-
-        public UserAccount? GetByUserName(string userName)
+        public async Task<ValidatedUser> GetUserByNamePassword(string userName, string password)
         {
-            return _users.FirstOrDefault(x => x.UserName == userName);
+            ValidatedUser fetchUser = new ValidatedUser();
+
+            try
+            {
+                fetchUser = await _httpClient.GetFromJsonAsync<ValidatedUser>($"{_apiUrl}/User/ValidateUser?username={userName}&password={password}");
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+            return fetchUser;
         }
     }
 }

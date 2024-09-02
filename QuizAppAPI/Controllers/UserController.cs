@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using QuizAppAPI.Services;
 using QuizAppAPI.ViewModel;
+using QuizAppShared.Data;
 
 namespace QuizAppAPI.Controllers
 {
@@ -28,11 +29,17 @@ namespace QuizAppAPI.Controllers
             return Ok(users);
         }
 
-        [HttpGet("username")]
-        public IActionResult GetUser([FromQuery]string username)
+        [HttpGet("ValidateUser")]
+        public IActionResult GetUser(string username, string password)
         {
-            var user = UserService.GetUser(username);
-            return Ok(user);
+            var user = UserService.GetUser(username, password);
+            if (user == null) return Ok("null");
+            var validatedUser = new ValidatedUser
+            {
+                UserName = user.UserName,
+                Role = user.Role
+            };
+            return Ok(validatedUser);
         }
     }
 }
