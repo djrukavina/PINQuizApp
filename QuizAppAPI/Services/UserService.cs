@@ -1,6 +1,6 @@
 ﻿using QuizAppAPI.Context;
-using QuizAppAPI.ViewModel;
 using QuizAppShared.Data;
+using QuizAppShared.ViewModel;
 
 namespace QuizAppAPI.Services
 {
@@ -25,9 +25,9 @@ namespace QuizAppAPI.Services
             _context.SaveChanges();
         }
 
-        public List<User> GetUsers()
+        public bool UserCreated(string username)
         {
-            return _context.User.ToList();
+            return (_context.User.FirstOrDefault(x => x.UserName == username)) != null ? true : false ;
         }
 
         public User GetUser(string username, string password)

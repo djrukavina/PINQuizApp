@@ -1,12 +1,13 @@
 ﻿using QuizAppShared.Data;
+using QuizAppShared.ViewModel;
 
 namespace QuizAppUI.Components.Authentication
 {
-    public class ValidatedUserService
+    public class UserService
     {
         private readonly HttpClient _httpClient;
         private readonly string _apiUrl;
-        public ValidatedUserService(HttpClient httpClient, IConfiguration configuration)
+        public UserService(HttpClient httpClient, IConfiguration configuration)
         {
             _httpClient = httpClient;
             _apiUrl = configuration.GetValue<string>("ServerAPI");
@@ -25,6 +26,23 @@ namespace QuizAppUI.Components.Authentication
                 return null;
             }
             return fetchUser;
+        }
+
+        public async Task<bool> UserExist(string username)
+        {
+            return await _httpClient.GetFromJsonAsync<bool>($"{_apiUrl}/User?username={username}");
+        }
+
+        public async Task CreateUser(UserVM user)
+        {
+            try
+            {
+                await _httpClient.PostAsJsonAsync($"{_apiUrl}/User", user);
+            }
+            catch
+            {
+                Console.WriteLine("data was not sent");
+            }
         }
     }
 }

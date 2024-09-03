@@ -1,0 +1,66 @@
+﻿@page "/register"
+@using QuizAppShared.ViewModel
+@using QuizAppUI.Components.Authentication
+@inject UserService userService
+@inject NavigationManager navManager
+@inject IJSRuntime js
+
+<PageTitle>Register</PageTitle>
+
+<div class="row">
+    <div class="col-lg-4 offset-lg-4 pt-4 pb-4 border">
+        <div class="mb-3 text-center">
+            <h3>REGISTER</h3>
+        </div>
+        <div class="mb-3">
+            <label>Username</label>
+            <input @bind="model.Name" class="form-control" placeholder="Username" />
+        </div>
+        <div class="mb-3">
+            <label>Password</label>
+            <input @bind="model.Password" type="password" class="form-control" placeholder="Password" />
+        </div>
+        <div class="mb-3">
+            <label>Repeat password</label>
+            <input @bind="repeatPassword" type="password" class="form-control" placeholder="Repeat password" />
+        </div>
+        <div class="mb-3">
+            <label>E-mail</label>
+            <input @bind="model.Email" type="email" class="form-control" placeholder="E-mail" />
+        </div>
+        <div class="mb-3 d-grid gap-2">
+            <button @onclick="RegisterUser" class="btn btn-primary">Register</button>
+        </div>
+    </div>
+</div>
+
+
+@code
+{
+    private UserVM model = new UserVM();
+    private string repeatPassword { get; set; }
+
+    private async Task RegisterUser()
+    {
+        if (model.Name == null || model.Password == null || model.Email == null || repeatPassword == null)
+        {
+            await js.InvokeVoidAsync("alert", "Input all data!");
+            return;
+        }
+        if (model.Password != repeatPassword)
+        {
+            await js.InvokeVoidAsync("alert", "Password don't match!");
+            return;
+        }
+        var userExist = await userService.UserExist(model.Name);
+        if (userExist)
+        {
+            await js.InvokeVoidAsync("alert", "User already exist!");
+            return;
+        }
+
+        await userService.CreateUser(model);
+        await js.InvokeVoidAsync("alert", "User created!");
+        navManager.NavigateTo("/login", true);
+    }
+}

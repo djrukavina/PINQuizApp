@@ -1,4 +1,4 @@
-﻿namespace QuizAppAPI.ViewModel
+﻿namespace QuizAppShared.ViewModel
 {
     public class UserVM
     {

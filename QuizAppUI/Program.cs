@@ -11,7 +11,7 @@ builder.Services.AddRazorComponents().AddInteractiveServerComponents();
 builder.Services.AddAuthenticationCore();
 builder.Services.AddScoped<ProtectedSessionStorage>();
 builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthenticationStateProvider>();
-builder.Services.AddSingleton<ValidatedUserService>();
+builder.Services.AddSingleton<UserService>();
 builder.Services.AddScoped<QuestionsService>();
 
 builder.Services.AddHttpClient();

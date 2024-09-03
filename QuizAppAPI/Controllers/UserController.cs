@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using QuizAppAPI.Services;
-using QuizAppAPI.ViewModel;
 using QuizAppShared.Data;
+using QuizAppShared.ViewModel;
 
 namespace QuizAppAPI.Controllers
 {
@@ -23,10 +23,10 @@ namespace QuizAppAPI.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetUsers()
+        public IActionResult UserExist(string username)
         {
-            var users = UserService.GetUsers();
-            return Ok(users);
+            var exists = UserService.UserCreated(username);
+            return Ok(exists);
         }
 
         [HttpGet("ValidateUser")]
