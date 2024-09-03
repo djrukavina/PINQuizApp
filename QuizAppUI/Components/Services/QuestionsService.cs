@@ -43,5 +43,19 @@ namespace QuizAppUI.Components.Services
                 Console.WriteLine("data was not sent");
             }
         }
+
+        public async Task<List<PlayedQuizVM>> GetUserPlayedQuizzes(string username)
+        {
+            List<PlayedQuizVM> playedQuizzes = new List<PlayedQuizVM>();
+            try
+            {
+                playedQuizzes = await _httpClient.GetFromJsonAsync<List<PlayedQuizVM>>($"{_apiUrl}/PlayedQuiz/username?username={username}");
+            }
+            catch
+            {
+                Console.WriteLine("data was not recieved");
+            }
+            return playedQuizzes;
+        }
     }
 }

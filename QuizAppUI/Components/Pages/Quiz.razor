@@ -1,59 +1,67 @@
 ﻿@page "/quiz"
-@attribute [Authorize(Roles = "Administrator, User")]
 @using Microsoft.AspNetCore.Authorization
 @using QuizAppShared.Data
 @using QuizAppUI.Components.Pages.Components
 @using QuizAppUI.Components.Services
 @inject QuestionsService questionsService
 
+<PageTitle>Quiz</PageTitle>
 
-@if (showQuiz)
-{
-    <QuizComponent questions="questions" quizCategory="@selectedCategory" ResetQuiz="ResetQuiz"></QuizComponent>
-}
-else
-{
-    <div class="d-flex justify-content-center align-items-center" style="height:75vh">
-        <div class="col">
-            <div class="row col-lg-8 offset-lg-2 text-center">
-                <div class="col-md-4">
-                    <p>Category:</p>
-                    <select @bind="selectedCategory" class="form-select">
-                        <option value="" disabled>Select an option</option>
-                        @foreach (var option in optionsCategory)
-                        {
-                            <option value="@option">@option</option>
-                        }
-                    </select>
-                </div>
-                <div class="col-md-4">
-                    <p>Difficulty:</p>
-                    <select @bind="selectedDifficulty" class="form-select">
-                        <option value="" disabled>Select an option</option>
-                        @foreach (var option in optionsDifficulty)
-                        {
-                            <option value="@option">@option</option>
-                        }
-                    </select>
-                </div>
-                <div class="col-md-4">
-                    <p>Number of questions:</p>
-                    <select @bind="selectedNumQuestion" class="form-select">
-                        <option value="" disabled>Select an option</option>
-                        @foreach (var option in optionsNumQuestion)
-                        {
-                            <option value="@option">@option</option>
-                        }
-                    </select>
+<AuthorizeView>
+    <Authorized>
+        @if (showQuiz)
+        {
+            <QuizComponent questions="questions" quizCategory="@selectedCategory" ResetQuiz="ResetQuiz"></QuizComponent>
+        }
+        else
+        {
+            <div class="d-flex justify-content-center align-items-center" style="height:75vh">
+                <div class="col">
+                    <div class="row col-lg-8 offset-lg-2 text-center">
+                        <div class="col-md-4">
+                            <p>Category:</p>
+                            <select @bind="selectedCategory" class="form-select">
+                                <option value="" disabled>Select an option</option>
+                                @foreach (var option in optionsCategory)
+                                {
+                                    <option value="@option">@option</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <p>Difficulty:</p>
+                            <select @bind="selectedDifficulty" class="form-select">
+                                <option value="" disabled>Select an option</option>
+                                @foreach (var option in optionsDifficulty)
+                                {
+                                    <option value="@option">@option</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <p>Number of questions:</p>
+                            <select @bind="selectedNumQuestion" class="form-select">
+                                <option value="" disabled>Select an option</option>
+                                @foreach (var option in optionsNumQuestion)
+                                {
+                                    <option value="@option">@option</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="row col-lg-4 offset-lg-4 text-center p-3">
+                        <button class="btn btn-primary btn-block my-1" @onclick="GetQuiz">Get Quiz</button>
+                    </div>
                 </div>
             </div>
-
-            <div class="row col-lg-4 offset-lg-4 text-center p-3">
-                <button class="btn btn-primary btn-block my-1" @onclick="GetQuiz">Get Quiz</button>
-            </div>
-        </div>
-    </div>
-}
+        }
+    </Authorized>
+    <NotAuthorized>
+        <h4>Please log in first!</h4>
+        <p>After you log in you can play quizzes here!</p>
+    </NotAuthorized>
+</AuthorizeView>
 
 
 @code

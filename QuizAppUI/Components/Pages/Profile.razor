@@ -1,0 +1,71 @@
+﻿@page "/profile"
+@using QuizAppShared.ViewModel
+@using QuizAppUI.Components.Services
+@inject QuestionsService questionsService
+
+<PageTitle>Profile</PageTitle>
+
+<AuthorizeView>
+    <Authorized>
+        <h1 class="pb-3">Hi, @username!</h1>
+
+        @if (noPlayedQuizzes > 0)
+        {
+            <div class="col-lg-8 offset-lg-2">
+                <h4>Your previous quizzes:</h4>
+                <table class="table table-striped table-bordered table-hover text-center" data-sticky-header="true">
+                    <thead class="table-dark">
+                    <tr>
+                        <th>Category</th>
+                        <th>Correct Answers</th>
+                        <th>Total Questions</th>
+                        <th>% Correct</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var quiz in playedQuizzes)
+                    {
+                        <tr>
+                            <td>@quiz.Category</td>
+                            <td>@quiz.NoQuestionCorrect</td>
+                            <td>@quiz.NoQuestionTotal</td>
+                            <td>@Math.Round((float)quiz.NoQuestionCorrect * 100 / quiz.NoQuestionTotal, 2) %</td>
+                        </tr>
+                    }
+                    </tbody>
+                </table>
+            </div>
+        }
+        else
+        {
+            <h4>No quizzes played yet!</h4>
+        }
+
+
+    </Authorized>
+    <NotAuthorized>
+        <h4>Please log in first!</h4>
+        <p>After you log in you can see your profile here!</p>
+    </NotAuthorized>
+</AuthorizeView>
+
+
+@code
+{
+    [CascadingParameter] private Task<AuthenticationState> authenticationState { get; set; }
+    private string username { get; set; }
+    private List<PlayedQuizVM> playedQuizzes { get; set; }
+    private int noPlayedQuizzes { get; set; }
+
+    protected override async void OnInitialized()
+    {
+        var authState = await authenticationState;
+        username = authState.User.Identity.Name;
+
+        playedQuizzes = await questionsService.GetUserPlayedQuizzes(username);
+        playedQuizzes.Reverse();
+        noPlayedQuizzes = playedQuizzes.Count();
+        StateHasChanged();
+        base.OnInitialized();
+    }
+}

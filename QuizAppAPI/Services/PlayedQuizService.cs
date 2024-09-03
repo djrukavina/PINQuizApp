@@ -25,14 +25,38 @@ namespace QuizAppAPI.Services
             _context.SaveChanges();
         }
 
-        public List<PlayedQuiz> GetPlayedQuizzes()
+        public List<PlayedQuizVM> GetPlayedQuizzes()
         {
-            return _context.PlayedQuiz.ToList();
+            var playedQuizzes = _context.PlayedQuiz.ToList();
+            var playedQuizzesVM = new List<PlayedQuizVM>();
+            foreach (var quiz in playedQuizzes)
+            {
+                playedQuizzesVM.Add(new PlayedQuizVM
+                {
+                    Username = quiz.UserName,
+                    Category = quiz.Category,
+                    NoQuestionCorrect = quiz.NoQuestionCorrect,
+                    NoQuestionTotal = quiz.NoQuestionTotal
+                });
+            }
+            return playedQuizzesVM;
         }
 
-        public List<PlayedQuiz> GetUserPlayedQuizzes(string username)
+        public List<PlayedQuizVM> GetUserPlayedQuizzes(string username)
         {
-            return _context.PlayedQuiz.Where(x => x.UserName == username).ToList();
+            var playedQuizzes = _context.PlayedQuiz.Where(x => x.UserName == username).ToList();
+            var playedQuizzesVM = new List<PlayedQuizVM>();
+            foreach (var quiz in playedQuizzes)
+            {
+                playedQuizzesVM.Add(new PlayedQuizVM
+                {
+                    Username = quiz.UserName,
+                    Category = quiz.Category,
+                    NoQuestionCorrect= quiz.NoQuestionCorrect,
+                    NoQuestionTotal= quiz.NoQuestionTotal
+                });
+            }
+            return playedQuizzesVM;
         }
     }
 }
