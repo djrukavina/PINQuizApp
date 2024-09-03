@@ -1,6 +1,6 @@
 ﻿using QuizAppAPI.Context;
-using QuizAppAPI.Data;
-using QuizAppAPI.ViewModel;
+using QuizAppShared.ViewModel;
+using QuizAppShared.Data;
 
 namespace QuizAppAPI.Services
 {

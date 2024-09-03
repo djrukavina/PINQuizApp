@@ -1,4 +1,6 @@
 ﻿using QuizAppShared.Data;
+using QuizAppShared.ViewModel;
+
 
 namespace QuizAppUI.Components.Services
 {
@@ -12,22 +14,34 @@ namespace QuizAppUI.Components.Services
             _apiUrl = configuration.GetValue<string>("ServerAPI");
         }
 
-        public async Task<List<Question>> GetQuestionsForQuiz()
+        public async Task<List<Question>> GetQuestionsForQuiz(string amount, string category, string difficulty)
         {
-            int amount = 8;
-            int category = 21;
-            int difficulty = 0;
+            int amountAPI = int.Parse(amount);
+            int categoryAPI = QuizSettings.QuizCategories.FirstOrDefault(x => x.Value == category).Key;
+            int difficultyAPI = QuizSettings.QuizDifficulty.FirstOrDefault(x => x.Value == difficulty).Key;
             List<Question> questionList = new List<Question>();
 
             try
             {
-                questionList = await _httpClient.GetFromJsonAsync<List<Question>>($"{_apiUrl}/QuizData/quizParams?amount={amount}&category={category}&difficulty={difficulty}");
+                questionList = await _httpClient.GetFromJsonAsync<List<Question>>($"{_apiUrl}/QuizData/quizParams?amount={amountAPI}&category={categoryAPI}&difficulty={difficultyAPI}");
             }
             catch
             {
                 return null;
             }
             return questionList;
+        }
+
+        public async Task SubmitQuizResult(PlayedQuizVM playedQuiz)
+        {
+            try
+            {
+                await _httpClient.PostAsJsonAsync($"{_apiUrl}/PlayedQuiz", playedQuiz);
+            }
+            catch
+            {
+                Console.WriteLine("data was not sent");
+            }
         }
     }
 }

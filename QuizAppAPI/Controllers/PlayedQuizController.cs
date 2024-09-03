@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using QuizAppAPI.Services;
-using QuizAppAPI.ViewModel;
+using QuizAppShared.ViewModel;
 
 namespace QuizAppAPI.Controllers
 {
@@ -15,7 +15,7 @@ namespace QuizAppAPI.Controllers
         }
 
         [HttpPost]
-        public IActionResult AddPlayedQuiz([FromBody] PlayedQuizVM playedQuiz)
+        public IActionResult AddPlayedQuiz([FromBody]PlayedQuizVM playedQuiz)
         {
             PlayedQuizService.AddPlayedQuiz(playedQuiz);
             return Ok();

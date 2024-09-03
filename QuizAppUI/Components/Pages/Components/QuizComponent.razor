@@ -1,4 +1,7 @@
 ﻿@using QuizAppShared.Data
+@using QuizAppShared.ViewModel
+@using QuizAppUI.Components.Services
+@inject QuestionsService questionsService
 
 <div class="container-fluid">
 	<div class="row">
@@ -7,29 +10,34 @@
 				Quiz
 			</h3>
 			<p class="text-center border border-primary border-1 p-3">
-				@(new MarkupString(@question.question))
+				@(new MarkupString(question.question))
 			</p>
+			<div class="row col-8 offset-lg-2 mt-2 text-center">
+				<p class="col-md-6" style="font-size:small">
+					Question: @(currentQuestion + 1) / @(lastQuestion + 1)
+				</p>
+				<p class="col-md-6" style="font-size:small">
+					Correct: @correctAnswers
+				</p>
+			</div>
 			<div class="col text-center">
 				<button type="button" class="btn @btnClass[0] btn-block col-8 my-1" @onclick="() => Answer(0)" disabled="@btnDisabled">
-					@(new MarkupString(@shuffledAnswers[0]))
+					@(new MarkupString(shuffledAnswers[0]))
 				</button>
 				<button type="button" class="btn @btnClass[1] btn-block col-8 my-1" @onclick="() => Answer(1)" disabled="@btnDisabled">
-					@(new MarkupString(@shuffledAnswers[1]))
+					@(new MarkupString(shuffledAnswers[1]))
 				</button>
 				<button type="button" class="btn @btnClass[2] btn-block col-8 my-1" @onclick="() => Answer(2)" disabled="@btnDisabled">
-					@(new MarkupString(@shuffledAnswers[2]))
+					@(new MarkupString(shuffledAnswers[2]))
 				</button>
 				<button type="button" class="btn @btnClass[3] btn-block col-8 my-1" @onclick="() => Answer(3)" disabled="@btnDisabled">
-					@(new MarkupString(@shuffledAnswers[3]))
+					@(new MarkupString(shuffledAnswers[3]))
 				</button>
 				<div class="row col-8 offset-lg-2 mt-2 text-center">
-					<p class="col-md-4" style="font-size:small">
-						category: @question.category.ToLower()
+					<p class="col-md-6" style="font-size:small">
+						category: @(new MarkupString(question.category.ToLower()))
 					</p>
-					<p class="col-md-4" style="font-size:small">
-						@(currentQuestion + 1) / @(lastQuestion + 1)
-					</p>
-					<p class="col-md-4" style="font-size:small">
+					<p class="col-md-6" style="font-size:small">
 						difficulty: @question.difficulty
 					</p>
 				</div>
@@ -45,6 +53,13 @@
 						Finish Quiz
 					</button>
 				}
+				@if (showDataUploaded)
+				{
+					<p>Quiz data is uploaded successfully.</p>
+					<button type="button" class="btn btn-outline-primary btn-block col-4 my-1" @onclick="@(() => ResetQuiz.InvokeAsync())">
+						Back to Quiz selector
+					</button>
+				}
 			</div>
 		</div>
 	</div>
@@ -53,20 +68,27 @@
 @code
 {
 	[Parameter] public List<Question> questions { get; set; }
+	[Parameter] public string quizCategory { get; set; }
+	[Parameter] public EventCallback ResetQuiz { get; set; }
+	[CascadingParameter] private Task<AuthenticationState> authenticationState { get; set; }
 	private static Random rng = new Random();
 	private Question question { get; set; }
 	private List<string> shuffledAnswers { get; set; }
 	private int currentQuestion { get; set; } = 0;
 	private int lastQuestion { get; set; }
+	private int correctAnswers { get; set; }
 	private List<string> btnClass { get; set; } = new List<string>();
 	private bool btnDisabled { get; set; }
 	private bool showNextBtn { get; set; }
 	private bool showFinishQuizBtn { get; set; } = false;
+	public PlayedQuizVM playedQuiz { get; set; }
+	private bool showDataUploaded { get; set; }
 
 	protected override void OnInitialized()
 	{
 		question = questions[0];
 		lastQuestion = questions.Count() - 1;
+		correctAnswers = 0;
 		ResetState();
 		base.OnInitialized();
 	}
@@ -89,6 +111,7 @@
 	private void Answer(int n)
 	{
 		btnClass[n] = (shuffledAnswers[n] == question.correct_answer) ? "btn-success" : "btn-danger";
+		correctAnswers += (shuffledAnswers[n] == question.correct_answer) ? 1 : 0;
 		btnDisabled = true;
 		if (currentQuestion != lastQuestion) showNextBtn = true; else showFinishQuizBtn = true;
 	}
@@ -101,8 +124,21 @@
 			ResetState();
 		}
 	}
-	private void FinishQuiz()
+	private async void FinishQuiz()
 	{
-		
+		var authState = await authenticationState;
+		playedQuiz = new PlayedQuizVM
+		{
+			Username = authState.User.Identity.Name,
+			Category = quizCategory,
+			NoQuestionCorrect = correctAnswers,
+			NoQuestionTotal = lastQuestion + 1
+		};
+
+		await questionsService.SubmitQuizResult(playedQuiz);
+
+		showFinishQuizBtn = false;
+		showDataUploaded = true;
+		StateHasChanged();
 	}
 }

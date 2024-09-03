@@ -1,4 +1,4 @@
-﻿namespace QuizAppAPI.Data
+﻿namespace QuizAppShared.Data
 {
     public static class QuizSettings
     {

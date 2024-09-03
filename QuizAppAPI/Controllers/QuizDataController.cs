@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using QuizAppAPI.Models;
-using QuizAppAPI.Data;
 using QuizAppShared.Data;
 
 namespace QuizAppAPI.Controllers
@@ -26,7 +25,7 @@ namespace QuizAppAPI.Controllers
             List<Question> questions = new List<Question>();
             string requestString = string.Empty;
 
-            if (amount > 10 || amount <= 0)
+            if (amount > 25 || amount <= 0)
                 return StatusCode(StatusCodes.Status500InternalServerError, $"Too many or too few questions to get from external API, {category}");
             if (!_category.Contains(category))
                 return StatusCode(StatusCodes.Status500InternalServerError, $"Error getting category from external API, {category}");

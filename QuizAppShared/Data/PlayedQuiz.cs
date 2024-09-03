@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace QuizAppAPI.Data
+namespace QuizAppShared.Data
 {
     public class PlayedQuiz
     {
