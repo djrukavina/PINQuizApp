@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuizAppAPI", "QuizAppAPI\Qu
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuizAppShared", "QuizAppShared\QuizAppShared.csproj", "{D072F83F-B8C6-49C7-A473-561C040DF5F3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuizAppUI", "QuizAppUI\QuizAppUI.csproj", "{47516D9E-F275-46DF-B709-1E2A51FE7E95}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuizAppUI", "QuizAppUI\QuizAppUI.csproj", "{47516D9E-F275-46DF-B709-1E2A51FE7E95}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

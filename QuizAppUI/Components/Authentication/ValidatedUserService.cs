@@ -2,11 +2,11 @@
 
 namespace QuizAppUI.Components.Authentication
 {
-    public class UserAccountService
+    public class ValidatedUserService
     {
         private readonly HttpClient _httpClient;
         private readonly string _apiUrl;
-        public UserAccountService(HttpClient httpClient, IConfiguration configuration)
+        public ValidatedUserService(HttpClient httpClient, IConfiguration configuration)
         {
             _httpClient = httpClient;
             _apiUrl = configuration.GetValue<string>("ServerAPI");
@@ -20,7 +20,7 @@ namespace QuizAppUI.Components.Authentication
             {
                 fetchUser = await _httpClient.GetFromJsonAsync<ValidatedUser>($"{_apiUrl}/User/ValidateUser?username={userName}&password={password}");
             }
-            catch (Exception ex)
+            catch
             {
                 return null;
             }

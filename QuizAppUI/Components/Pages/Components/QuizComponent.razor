@@ -1,0 +1,108 @@
+﻿@using QuizAppShared.Data
+
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-lg-6 offset-lg-3 pt-4 pb-4">
+			<h3 class="text-center p-4">
+				Quiz
+			</h3>
+			<p class="text-center border border-primary border-1 p-3">
+				@(new MarkupString(@question.question))
+			</p>
+			<div class="col text-center">
+				<button type="button" class="btn @btnClass[0] btn-block col-8 my-1" @onclick="() => Answer(0)" disabled="@btnDisabled">
+					@(new MarkupString(@shuffledAnswers[0]))
+				</button>
+				<button type="button" class="btn @btnClass[1] btn-block col-8 my-1" @onclick="() => Answer(1)" disabled="@btnDisabled">
+					@(new MarkupString(@shuffledAnswers[1]))
+				</button>
+				<button type="button" class="btn @btnClass[2] btn-block col-8 my-1" @onclick="() => Answer(2)" disabled="@btnDisabled">
+					@(new MarkupString(@shuffledAnswers[2]))
+				</button>
+				<button type="button" class="btn @btnClass[3] btn-block col-8 my-1" @onclick="() => Answer(3)" disabled="@btnDisabled">
+					@(new MarkupString(@shuffledAnswers[3]))
+				</button>
+				<div class="row col-8 offset-lg-2 mt-2 text-center">
+					<p class="col-md-4" style="font-size:small">
+						category: @question.category.ToLower()
+					</p>
+					<p class="col-md-4" style="font-size:small">
+						@(currentQuestion + 1) / @(lastQuestion + 1)
+					</p>
+					<p class="col-md-4" style="font-size:small">
+						difficulty: @question.difficulty
+					</p>
+				</div>
+				@if (showNextBtn)
+				{
+					<button type="button" class="btn btn-outline-primary btn-block col-4 my-1" @onclick="NextQuestion">
+						Next Question
+					</button>
+				}
+				@if (showFinishQuizBtn)
+				{
+					<button type="button" class="btn btn-outline-primary btn-block col-4 my-1" @onclick="FinishQuiz">
+						Finish Quiz
+					</button>
+				}
+			</div>
+		</div>
+	</div>
+</div>
+
+@code
+{
+	[Parameter] public List<Question> questions { get; set; }
+	private static Random rng = new Random();
+	private Question question { get; set; }
+	private List<string> shuffledAnswers { get; set; }
+	private int currentQuestion { get; set; } = 0;
+	private int lastQuestion { get; set; }
+	private List<string> btnClass { get; set; } = new List<string>();
+	private bool btnDisabled { get; set; }
+	private bool showNextBtn { get; set; }
+	private bool showFinishQuizBtn { get; set; } = false;
+
+	protected override void OnInitialized()
+	{
+		question = questions[0];
+		lastQuestion = questions.Count() - 1;
+		ResetState();
+		base.OnInitialized();
+	}
+
+	private List<string> ShuffleAnswers(Question q)
+	{
+		var allAnswers = new List<string>();
+		allAnswers.Add(q.correct_answer);
+		allAnswers.AddRange(q.incorrect_answers);
+		return allAnswers.OrderBy(_ => rng.Next()).ToList();
+	}
+	private void ResetState()
+	{
+		shuffledAnswers = ShuffleAnswers(question);
+		btnClass = new List<string>();
+		btnClass.AddRange(Enumerable.Repeat("btn-outline-primary", 4));
+		btnDisabled = false;
+		showNextBtn = false;
+	}
+	private void Answer(int n)
+	{
+		btnClass[n] = (shuffledAnswers[n] == question.correct_answer) ? "btn-success" : "btn-danger";
+		btnDisabled = true;
+		if (currentQuestion != lastQuestion) showNextBtn = true; else showFinishQuizBtn = true;
+	}
+	private void NextQuestion()
+	{
+		if (currentQuestion < lastQuestion)
+		{
+			++currentQuestion;
+			question = questions[currentQuestion];
+			ResetState();
+		}
+	}
+	private void FinishQuiz()
+	{
+		
+	}
+}

@@ -1,0 +1,34 @@
+﻿@page "/quiz"
+@attribute [Authorize(Roles = "Administrator, User")]
+@using Microsoft.AspNetCore.Authorization
+@using QuizAppUI.Components.Pages.Components
+@using QuizAppUI.Components.Services
+@inject QuestionsService questionsService
+
+
+@if (showQuiz)
+{
+    <QuizComponent questions="questions"></QuizComponent>
+}
+else
+{
+    <div class="col-lg-4 offset-lg-4 text-center border border-primary border-1 p-3">
+        <p class="">Quiz not loaded</p>
+        <button class="btn btn-primary btn-block col-4 my-1" @onclick="GetQuiz">Get Quiz</button>
+
+    </div>
+}
+
+
+@code
+{
+    private List<Question> questions = new List<Question>();
+    private bool showQuiz { get; set; } = false;
+
+    private async void GetQuiz()
+    {
+        questions = await questionsService.GetQuestionsForQuiz();
+        showQuiz = true;
+        StateHasChanged();
+    }
+}

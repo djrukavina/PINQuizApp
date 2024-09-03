@@ -1,10 +1,10 @@
-﻿@using QuizAppShared.Data
+﻿@page "/login"
+@using QuizAppShared.Data
 @using QuizAppUI.Components.Authentication
-@inject UserAccountService userAccountService
+@inject ValidatedUserService validatedUserService
 @inject AuthenticationStateProvider authStateProvider
 @inject NavigationManager navManager
 @inject IJSRuntime js
-@page "/login"
 
 <div class="row">
     <div class="col-lg-4 offset-lg-4 pt-4 pb-4 border">
@@ -13,7 +13,7 @@
         </div>
         <div class="mb-3">
             <label>User Name</label>
-            <input @bind="model.UserName" class="form-control" placeholder="User Name" />
+            <input @bind="model.UserName" class="form-control" placeholder="Username" />
         </div>
         <div class="mb-3">
             <label>Password</label>
@@ -38,10 +38,10 @@
 
     private async Task Authenticate()
     {
-        ValidatedUser userAccount = await userAccountService.GetUserByNamePassword(model.UserName, model.Password);
+        ValidatedUser userAccount = await validatedUserService.GetUserByNamePassword(model.UserName, model.Password);
         if (userAccount == null)
         {
-            await js.InvokeVoidAsync("alert", "Invalid User Name or Password!");
+            await js.InvokeVoidAsync("alert", "Invalid Username or Password!");
             return;
         }
         var customAuthStateProvider = (CustomAuthenticationStateProvider)authStateProvider;

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using QuizAppAPI.Models;
 using QuizAppAPI.Data;
+using QuizAppShared.Data;
 
 namespace QuizAppAPI.Controllers
 {
@@ -22,6 +23,7 @@ namespace QuizAppAPI.Controllers
             ICollection<int> _category = QuizSettings.QuizCategories.Keys;
             ICollection<int> _difficulty = QuizSettings.QuizDifficulty.Keys;
             FetchQuizModel fetchData = new FetchQuizModel();
+            List<Question> questions = new List<Question>();
             string requestString = string.Empty;
 
             if (amount > 10 || amount <= 0)
@@ -37,12 +39,23 @@ namespace QuizAppAPI.Controllers
             try
             {
                 fetchData = await _httpClient.GetFromJsonAsync<FetchQuizModel>($"{_apiUrl}?amount={amount}{requestString}&type=multiple");
+                foreach (var data in fetchData.results)
+                {
+                    questions.Add(new Question
+                    {
+                        question = data.question,
+                        difficulty = data.difficulty,
+                        category = data.category,
+                        correct_answer = data.correct_answer,
+                        incorrect_answers = data.incorrect_answers
+                    });
+                }
             }
             catch (Exception ex)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, $"Error retrieving data from external API, {ex}");
             }
-            return Ok(fetchData);
+            return Ok(questions);
         }
     }
 }
