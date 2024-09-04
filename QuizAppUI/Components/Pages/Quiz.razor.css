@@ -1,0 +1,20 @@
+﻿.qselector {
+    color: var(--orange);
+}
+
+.btn {
+    background-color: var(--bgdark);
+    color: var(--aqua);
+}
+
+select {
+    background-color: var(--gray);
+}
+
+.noauth {
+    color: var(--white);
+}
+
+    .noauth a {
+        color: var(--orange);
+    }

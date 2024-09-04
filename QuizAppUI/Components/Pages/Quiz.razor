@@ -16,7 +16,7 @@
         else
         {
             <div class="d-flex justify-content-center align-items-center" style="height:75vh">
-                <div class="col">
+                <div class="col qselector">
                     <div class="row col-lg-8 offset-lg-2 text-center">
                         <div class="col-md-4">
                             <p>Category:</p>
@@ -51,15 +51,17 @@
                     </div>
 
                     <div class="row col-lg-4 offset-lg-4 text-center p-3">
-                        <button class="btn btn-primary btn-block my-1" @onclick="GetQuiz">Get Quiz</button>
+                        <button class="btn btn-block my-1" @onclick="GetQuiz">Get Quiz</button>
                     </div>
                 </div>
             </div>
         }
     </Authorized>
     <NotAuthorized>
-        <h4>Please log in first!</h4>
-        <p>After you <a href="/login">login</a> you can play quizzes here!</p>
+        <div class="noauth">
+            <h4>Please log in first!</h4>
+            <p>After you <a href="/login">login</a> you can play quizzes here!</p>
+        </div>
     </NotAuthorized>
 </AuthorizeView>
 

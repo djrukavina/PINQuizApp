@@ -1,0 +1,15 @@
+﻿h1, div {
+    color: var(--white);
+}
+
+.table {
+    background-color: var(--gray);
+}
+
+.noauth {
+    color: var(--white);
+}
+
+    .noauth a {
+        color: var(--orange);
+    }

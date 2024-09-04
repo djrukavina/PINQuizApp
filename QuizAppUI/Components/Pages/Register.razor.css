@@ -1,0 +1,9 @@
+﻿.bgdark {
+    background-color: var(--bgdark);
+    color: var(--orange);
+}
+
+.btn {
+    background-color: var(--bglight);
+    color: var(--aqua);
+}

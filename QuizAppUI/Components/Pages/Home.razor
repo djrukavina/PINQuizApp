@@ -5,20 +5,16 @@
 
 <AuthorizeView>
     <Authorized>
-        <h1>Hello, @context.User.Identity.Name!</h1>
+        <h3>Hello @context.User.Identity.Name!</h3>
     </Authorized>
     <NotAuthorized>
-        <h1>Hello, Guest!</h1>
+        <h3>Hello guest!</h3>
     </NotAuthorized>
 </AuthorizeView>
 
-Welcome to your new app.
-
-<AuthorizeView>
-    <Authorized>
-        <button class="btn btn-outline-primary" @onclick="DisplayGreetingAlert">Display Greeting Alert</button>
-    </Authorized>
-</AuthorizeView>
+<div class="image-container d-flex justify-content-center align-items-center">
+    <img src="/Images/logo-color.png" alt="logo">
+</div>
 
 @code
 {
@@ -29,6 +25,6 @@ Welcome to your new app.
     {
         var authState = await authenticationState;
         var message = $"Hello {authState.User.Identity.Name}";
-        js.InvokeVoidAsync("alert", message);
+        await js.InvokeVoidAsync("alert", message);
     }
 }

@@ -1,8 +1,27 @@
-html, body {
-    /*font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;*/
+:root {
+    /* COLORS */
+    --bglight: #294C60;
+    --bgdark: #001B2E;
+    --gray: #ADB6C4;
+    --creme: #FFEFD3;
+    --orange: #FFC49B;
+    --white: #FFFFFF;
+    --black: #000000;
+    /* FONTS*/
+    --fprimary: "Aclonica", sans-serif;
+    --fsecondary: "Akaya Telivigala", system-ui;
+}
+
+.font-primary {
     font-family: "Aclonica", sans-serif;
-    font-weight: 400;
-    font-style: normal;
+}
+
+.font-secondary {
+    font-family: "Akaya Telivigala", system-ui;
+}
+
+html, body {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
 
 a, .btn-link {

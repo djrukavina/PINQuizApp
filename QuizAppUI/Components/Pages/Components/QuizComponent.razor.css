@@ -1,0 +1,32 @@
+﻿.quizcontainer {
+    background-color: var(--bgdark);
+    border: 1px solid var(--orange);
+    color: var(--orange);
+    padding: 25px;
+}
+
+.quizborder {
+    border: 1px solid var(--orange);
+}
+
+.quizinfo {
+    color: var(--gray);
+}
+
+.btn-outline-primary {
+    border: 1px solid var(--orange);
+    color: var(--orange);
+}
+
+.btn-success {
+    border: 1px solid green;
+}
+
+.btn-danger {
+    border: 1px solid red;
+}
+
+.btn:hover {
+    background-color: var(--orange);
+    color: var(--black);
+}

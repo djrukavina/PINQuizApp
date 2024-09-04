@@ -1,0 +1,8 @@
+﻿h3 {
+    color: var(--white);
+    text-align: right;
+}
+
+.image-container {
+    height: 80vh;
+}
